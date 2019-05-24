@@ -9,7 +9,7 @@ class Request
         return $_GET;
     }
 
-    public function getParsedBody(): array
+    public function getParsedBody()
     {
         return $_POST ?: null;
     }
