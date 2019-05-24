@@ -1,6 +1,6 @@
 <?php
 
-use Framework\Http\Request;
+use Test\Framework\Http\RequestFactory;
 
 chdir(dirname(__DIR__));
 require 'vendor/autoload.php';
@@ -12,9 +12,7 @@ require 'vendor/autoload.php';
 //$request->withParsedBody($_POST);
 
 // необходим return $this в каждом из методов
-$request = (new Request())
-    ->withQueryParams($_GET)
-    ->withParsedBody($_POST);
+$request = RequestFactory::fromGlobals();
 
 ### Action
 
