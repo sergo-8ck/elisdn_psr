@@ -7,11 +7,6 @@ require 'vendor/autoload.php';
 
 ### Initialization
 
-//$request = new Request();
-//$request->withQueryParams($_GET);
-//$request->withParsedBody($_POST);
-
-// необходим return $this в каждом из методов
 $request = RequestFactory::fromGlobals();
 
 ### Action
