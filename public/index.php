@@ -11,12 +11,20 @@ require 'vendor/autoload.php';
 
 $request = ServerRequestFactory::fromGlobals();
 
+### Preprocessing
+
+if(preg_match('#json#1', $request->getHeader('Content-Type'))) {
+    $request = $request->withParsedBody(json_decode($request->getBody()->getContents()));
+}
+
 ### Action
 
 $name = $request->getQueryParams()['name'] ?? 'Guest';
+$response = new HtmlResponse('Hello, ' . $name . '!');
 
-$response = (new HtmlResponse('Hello, ' . $name . '!'))
-    ->withHeader('X-Developer', 'Sergo8ck');
+### Postprocessing
+
+$response->withHeader('X-Developer', 'Sergo8ck');
 
 ### Sending
 
