@@ -3,6 +3,7 @@
 use Zend\Diactoros\Response\HtmlResponse;
 use Zend\HttpHandlerRunner\Emitter\SapiEmitter;
 use Zend\Diactoros\ServerRequestFactory;
+use Zend\Diactoros\Response\JsonResponse;
 
 chdir(dirname(__DIR__));
 require 'vendor/autoload.php';
@@ -12,15 +13,32 @@ require 'vendor/autoload.php';
 $request = ServerRequestFactory::fromGlobals();
 
 ### Preprocessing
-
-if(preg_match('#json#1', $request->getHeader('Content-Type'))) {
-    $request = $request->withParsedBody(json_decode($request->getBody()->getContents()));
-}
+// TODO
 
 ### Action
 
-$name = $request->getQueryParams()['name'] ?? 'Guest';
-$response = new HtmlResponse('Hello, ' . $name . '!');
+$path = $request->getUri()->getPath();
+
+if ($path === '/') {
+    $name = $request->getQueryParams()['name'] ?? 'Guest';
+    $response = new HtmlResponse('Hello, ' . $name . '!');
+} elseif ($path === '/about') {
+    $response = new HtmlResponse('<h1>About</h1>');
+} elseif ($path === '/blog') {
+    $response = new JsonResponse([
+        ['id' => 2, 'title' => 'The Second Post'],
+        ['id' => 1, 'title' => 'The First Post']
+    ]);
+} elseif (preg_match('#^/blog/(?<id>\d+)$#i', $path, $matches)) {
+    $id = $matches['id'];
+    if ($id > 2) {
+        $response = new JsonResponse(['error' => 'Undefined page'], 404);
+    } else {
+        $response = new JsonResponse(['id' => $id, 'title' => 'Post #' . $id]);
+    }
+} else {
+    $response = new JsonResponse(['error' => 'Undefined page'], 404);
+}
 
 ### Postprocessing
 
