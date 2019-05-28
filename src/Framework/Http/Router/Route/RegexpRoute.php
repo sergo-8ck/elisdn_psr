@@ -2,6 +2,7 @@
 
 namespace Framework\Http\Router\Route;
 
+use Framework\Http\Router\Result;
 use Psr\Http\Message\ServerRequestInterface;
 
 class RegexpRoute implements Route
