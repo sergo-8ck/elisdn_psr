@@ -3,7 +3,7 @@
 namespace Framework\Http\Router;
 
 use Framework\Http\Router\Exception\RequestNotMatchedException;
-use Framework\Http\Router\RouteNotFoundException;
+use Framework\Http\Router\Exception\RouteNotFoundException;
 use Psr\Http\Message\ServerRequestInterface;
 
 interface Router
