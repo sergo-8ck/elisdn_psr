@@ -1,10 +1,10 @@
 <?php
 
-namespace Framework\Http\Router;
+namespace Framework\Http\Router\Route;
 
 use Psr\Http\Message\ServerRequestInterface;
 
-class Route
+class RegexpRoute implements Route
 {
     private $name;
     private $pattern;
