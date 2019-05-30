@@ -11,6 +11,6 @@ class CredentialsMiddleware
     {
         /** @var ResponseInterface $response */
         $response = $next($request);
-        return $response->withHeader('X-Developer', 'ElisDN');
+        return $response->withHeader('X-Developer', 'Sergo8ck');
     }
 }
