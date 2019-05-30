@@ -27,14 +27,15 @@ $routes->get('about', '/about', Action\AboutAction::class);
 $routes->get('blog', '/blog', Action\Blog\IndexAction::class);
 $routes->get('blog_show', '/blog/{id}', Action\Blog\ShowAction::class)->tokens(['id' => '\d+']);
 $routes->get('cabinet', '/cabinet', [
-    Middleware\ProfilerMiddleware::class,
     new Middleware\BasicAuthMiddleware($params['users']),
     Action\CabinetAction::class,
 ]);
 
 $router = new AuraRouterAdapter($aura);
 $resolver = new MiddlewareResolver();
+$pipeline = new Pipeline();
 
+$pipeline->pipe($resolver->resolve(Middleware\ProfilerMiddleware::class));
 ### Running
 
 $request = ServerRequestFactory::fromGlobals();
@@ -44,15 +45,12 @@ try {
         $request = $request->withAttribute($attribute, $value);
     }
     $handlers = $result->getHandler();
-    $pipeline = new Pipeline();
     foreach (is_array($handlers) ? $handlers : [$handlers] as $handler) {
         $pipeline->pipe($resolver->resolve($handler));
     }
-    $response = $pipeline($request, new Middleware\NotFoundHandler());
-} catch (RequestNotMatchedException $e) {
-    $handler  = new Middleware\NotFoundHandler();
-    $response = $handler($request);
-}
+} catch (RequestNotMatchedException $e) {}
+
+$response = $pipeline($request, new Middleware\NotFoundHandler());
 
 ### Postprocessing
 
