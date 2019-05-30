@@ -7,7 +7,6 @@ use Framework\Http\Pipeline\Pipeline;
 use Framework\Http\Router\AuraRouterAdapter;
 use Framework\Http\Router\Exception\RequestNotMatchedException;
 use Zend\HttpHandlerRunner\Emitter\SapiEmitter;
-use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\ServerRequestFactory;
 
 chdir(dirname(__DIR__));
